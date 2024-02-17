@@ -14,13 +14,24 @@ const isProduction = process.env.NODE_ENV === 'production';
 // Create global app object
 const app = express();
 
-app.use(cors());
 
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// Indication du chemin vers les routes pour boxes
+app.use("/post", require("./routes/boxes.routes"));
+
+// Indication du modèle Box
+const Box = require("./models/Box");
+
+app.use(cors());
+ 
 // Normal express config defaults
-app.use(require('morgan')('dev'));
+/* app.use(require('morgan')('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+ */
 app.use(require('method-override')());
 app.use(express.static(__dirname + '/public'));
 
@@ -73,6 +84,7 @@ app.use(function(err, req, res, next) {
         }});
 });
 
+//Lancer le serveur
 var server = app.listen( process.env.PORT || 3002, function(){
     console.log('Listening on port ' + server.address().port);
 });
