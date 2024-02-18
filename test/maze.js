@@ -24,7 +24,7 @@ describe('Resolve mazes', function () {
             const start = boxes.find(element => element.x === 5 && element.y === 0);
             const end = boxes.find(element => element.x === 9 && element.y === 10);
 
-            // assert.equal(resolver.resolver(boxes, start, end), 15);
+            assert.equal(resolver.resolver(boxes, start, end), 15);
         });
     });
 
@@ -36,7 +36,7 @@ describe('Resolve mazes', function () {
             const start = boxes.find(element => element.x === 0 && element.y === 5);
             const end = boxes.find(element => element.x === 12 && element.y === 3);
 
-            // assert.equal(resolver.resolver(boxes, start, end), 23);
+            assert.equal(resolver.resolver(boxes, start, end), 23);
 
         });
 

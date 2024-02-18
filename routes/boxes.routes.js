@@ -1,29 +1,18 @@
 const express = require('express');
-const { setBoxes } = require('./boxes.controller');
+const { setBoxes, getBoxes, editBoxes, deleteBoxes } = require('./boxes.controller');
 const router = express.Router();
-
+const auth = require('./auth');
 
 //READ
-router.get("/", (req, res) => {
-    console.log("GET réussi avec succès")
-    res.json({ message: "Voici toutes les données"});
-});
+router.get("/", auth.required, getBoxes);
 
 //CREATE
-router.post("/", setBoxes);
+router.post("/", auth.required, setBoxes);
 
 //UPDATE
-router.put("/:id", (req, res) => {
-    console.log("PUT réussi avec succès")
-    console.log(req.body);
-    res.json({ message: "donnée ajoutée : " + req.params.id});
-});
+router.put("/:id", auth.required, editBoxes);
 
 //DELETE
-router.delete("/:id", (req, res) => {
-    console.log("DELETE réussi avec succès")
-    console.log(req.body);
-    res.json({ message: "donnée supprimée : " + req.params.id});
-});
+router.delete("/:id", auth.required, deleteBoxes);
 
 module.exports = router;
