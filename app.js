@@ -20,10 +20,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Indication du chemin vers les routes pour boxes
-app.use("/post", require("./routes/boxes.routes"));
+app.use("/box", require("./routes/boxes.routes"));
 
 // Indication du modèle Box
 const Box = require("./models/Box");
+
+// Indication du chemin vers les routes pour mazes
+app.use("/maze", require("./routes/mazes.routes"));
+
+// Indication du modèle Maze
+const Maze = require("./models/Maze");
+
 
 app.use(cors());
  
