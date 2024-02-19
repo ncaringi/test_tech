@@ -4,51 +4,41 @@ const mongoose = require("mongoose");
 
 exports.resolver = function (maze, start, end) {
     console.log('Resolve the path of the maze here');
-    console.log('BAAAAAAAAAAAAH');
-    console.log(start.x);
+    console.log('DEBUT DE LA RESOLUTION DU MAZE :');
 
     // Implement the path resolution logic here
     // Return the minimum number of steps required to go from start to end
 
-    // Example implementation:
-
-
-    /* const cell = maze.find(box => box.x === 3 && box.y === 4);
-
-    const neighbors = getNeighbors(cell, maze); 
-    console.log("NEIGHBORS : ", neighbors);
-}  */
-
-    console.log("MAZE : ", maze);
-    let pathLength = 0;
     const queue = [];
     const visited = new Set();
+    const distances = new Map(); // Map pour stocker les distances
+    distances.set(start, 0); // La distance de départ est 0
+    let neighbors = [];
     queue.push(start);
     visited.add(start);
 
-    while (queue.length > 0) {
+     while (queue.length > 0) {
+
         const current = queue.shift();
 
-        // Check if we reached the end point
+        // Vérifie si end est atteint
         if (current.x === end.x && current.y === end.y) {
-            return current.steps;
+            return distances.get(current)+1;
         }
 
-        // Explore the neighboring cells
-        const neighbors = getNeighbors(current, maze);
-        pathLength++;
-
-        //console.log("LISTE DES VOISINS : ", neighbors)
+        // Récupère les voisins de la cellule courante
+        neighbors = getNeighbors(current, maze); 
+        
 
         for (const neighbor of neighbors) {
             if (!visited.has(neighbor)) {
                 queue.push(neighbor);
                 visited.add(neighbor);
+                distances.set(neighbor, distances.get(current) + 1); // Met à jour la distance du voisin
             }
         }
     }
 
-    // If no path is found, return -1 or any other appropriate value
     return -1;
 }
 
@@ -64,20 +54,17 @@ function getNeighbors(cell, maze) {
     for (const direction of directions) {
         const neighborX = cell.x + direction.x;
         const neighborY = cell.y + direction.y;
+
+        //DEBUG
+        /* console.log("Current cell:", cell.x, cell.y);
+        console.log("Direction:", direction.x, direction.y);
+        console.log("Checking neighbor at:", neighborX, neighborY); */
         
-        if (isValidCell(neighborX, neighborY, maze)){
-            const box = maze.find(b => b.x === neighborX && b.y === neighborY);
-        
-    // Check if the neighbor is within the maze boundaries and is allowed
-            if (box.isAllowed) {
-                neighbors.push({ box });
-            }
-        }
+        const box = maze.find(b => b.x === neighborX && b.y === neighborY);
+        if (box !== undefined && box.isAllowed === true){
+            neighbors.push(box);
+        }        
     }
 
     return neighbors;
-}
-
-function isValidCell(neighborX, neighborY, maze) {
-    return neighborX >= 0 && neighborX < 10 && neighborY >= 0 && neighborY < 10;
 }
